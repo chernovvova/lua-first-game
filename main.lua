@@ -1,5 +1,27 @@
+Object = require 'libraries/classic/classic'
+
 function love.load()
-    image = love.graphics.newImage('imagepng.png')
+    local object_files = {}
+    reursiveEnumerate('objects', object_files)
+    requireFiles(object_files)
+end
+
+function reursiveEnumerate(folder, files)
+    local items = love.filesystem.getDirectoryItems(folder)
+    for _, item in ipairs(items) do
+        local file = folder .. '/' .. item
+        if love.filesystem.isFile(file) then
+            table.insert(files, file)
+        elseif love.filesystem.isDirectory(file) then
+            reursiveEnumerate(file, files)
+    end
+end
+
+function requireFiles(files)
+    for _, path in ipairs(files) do
+        local file = path:sub(1, -5)
+        require(file)
+    end
 end
 
 function love.update(dt)
