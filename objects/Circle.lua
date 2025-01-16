@@ -1,4 +1,4 @@
-Circle = Object:extend()
+Circle = GameObject:extend()
 
 function Circle:new(x, y, radius)
     self.x = x or 0

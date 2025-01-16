@@ -1,87 +1,62 @@
 Object = require 'libraries/classic/classic'
+Timer = require 'libraries/hump/timer'
+Input = require 'libraries/boipushy/Input'
+Camera = require 'libraries/hump/camera'
+
+
+require 'GameObject'
+require 'utils'
+
 
 function love.load()
+    love.graphics.setDefaultFilter('nearest', 'nearest')
+    love.graphics.setLineStyle('rough')
+
+    resize(3)
+
     local object_files = {}
-    reursiveEnumerate('objects', object_files)
+    recursiveEnumerate('objects', object_files)
     requireFiles(object_files)
 
-    hyperCircle = HyperCircle(400, 300, 50, 120, 10)
-end
+    local room_files = {}
+    recursiveEnumerate('rooms', room_files)
+    requireFiles(room_files)
 
+    rooms = {}
+    current_room = nil
 
-function reursiveEnumerate(folder, files)
-    local items = love.filesystem.getDirectoryItems(folder)
-    print(items)
-    for _, item in ipairs(items) do
-        local file = folder .. '/' .. item
-        local file_info = love.filesystem.getInfo(file)
-        print(file .. '  ' .. file_info.type)
-        if file_info.type == 'file' then
-            table.insert(files, file)
-        elseif file_info.type == 'directory' then
-            reursiveEnumerate(file, files)
-        end
-    end
-end
+    stage = Stage()
+    input = Input()
+    camera = Camera()
 
-function requireFiles(files)
-    for _, path in ipairs(files) do
-        local file = path:sub(1, -5)
-        require(file)
-    end
+    input:bind('f3', function() camera:shake(4, 60, 1) end)
 end
 
 function love.update(dt)
-    hyperCircle:draw(dt)
+    stage:update(dt)
+    camera:update(dt)
+    if current_room then
+        current_room:update(dt)
+    end
 end
 
 function love.draw()
-    hyperCircle:draw()
+    stage:draw()
+    if current_room then
+        current_room:draw()
+    end
 end
 
-function love.run()
-    if love.math then
-	       love.math.setRandomSeed(os.time())
-    end
+function addRoom(room_type, room_name, ...)
+    local room = _G[room_type](room_name, ...)
+    rooms[room_name] = room
+    return room
+end
 
-    if love.load then love.load(arg) end
-
-    -- We don't want the first frame's dt to include time taken by love.load.
-    if love.timer then love.timer.step() end
-
-    local dt = 0
-
-    -- Main loop time.
-    while true do
-        -- Process events.
-        if love.event then
-	    love.event.pump()
-	    for name, a,b,c,d,e,f in love.event.poll() do
-	        if name == "quit" then
-		    if not love.quit or not love.quit() then
-		        return a
-		    end
-	        end
-		love.handlers[name](a,b,c,d,e,f)
-	    end
-        end
-
-    	-- Update dt, as we'll be passing it to update
-    	if love.timer then
-    	    love.timer.step()
-    	    dt = love.timer.getDelta()
-    	end
-
-    	-- Call update and draw
-    	if love.update then love.update(dt) end -- will pass 0 if love.timer is disabled
-
-    	if love.graphics and love.graphics.isActive() then
-    	    love.graphics.clear(love.graphics.getBackgroundColor())
-    	    love.graphics.origin()
-                if love.draw then love.draw() end
-    	    love.graphics.present()
-    	end
-
-    	if love.timer then love.timer.sleep(0.001) end
-    end
+function gotoRoom(room_type, room_name, ...)
+    if current_room and rooms[room_name] then
+        if current_room.deactivate then current_room:deactivate() end
+        current_room = rooms[room_name]
+        if current_room.activate then current_room:activate() end
+    else current_room = addRoom(room_type, room_name, ...) end
 end
