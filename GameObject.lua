@@ -1,5 +1,6 @@
 GameObject = Object:extend()
 
+
 function GameObject:new(area, x, y, opts)
     local opts = opts or {}
     if opts then
@@ -16,6 +17,7 @@ function GameObject:new(area, x, y, opts)
     self.timer = Timer()
 end
 
+
 function GameObject:update(dt)
     if self.timer then
         self.timer:update(dt)
@@ -26,6 +28,16 @@ function GameObject:update(dt)
     end
 end
 
+
 function GameObject:draw()
 
+end
+
+
+function GameObject:destroy()
+    self.timer = nil
+    if self.fixture then
+        self.fixture:destroy()
+    end
+    self.fixture = nil
 end

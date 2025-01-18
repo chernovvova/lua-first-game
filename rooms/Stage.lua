@@ -27,3 +27,9 @@ function Stage:draw()
     love.graphics.draw(self.main_canvas, 0, 0, 0, sx, sy)
     love.graphics.setBlendMode('alpha')
 end
+
+
+function Stage:destroy()
+    self.area:destroy()
+    self.area = nil
+end
