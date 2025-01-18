@@ -5,7 +5,7 @@ Camera = require 'libraries/hump/camera'
 
 require 'GameObject'
 require 'utils'
-
+require 'constants'
 
 function love.load()
     love.graphics.setDefaultFilter('nearest', 'nearest')
