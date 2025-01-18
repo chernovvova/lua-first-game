@@ -29,6 +29,9 @@ function love.load()
     camera = Camera()
 
     input:bind('f3', function() camera:shake(4, 60, 1) end)
+    
+    input:bind('left', 'left')
+    input:bind('right', 'right')
 end
 
 
