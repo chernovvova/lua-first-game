@@ -3,7 +3,6 @@ Timer = require 'libraries/hump/timer'
 Input = require 'libraries/boipushy/Input'
 Camera = require 'libraries/hump/camera'
 
-
 require 'GameObject'
 require 'utils'
 
@@ -32,6 +31,7 @@ function love.load()
     input:bind('f3', function() camera:shake(4, 60, 1) end)
 end
 
+
 function love.update(dt)
     stage:update(dt)
     camera:update(dt)
@@ -40,6 +40,7 @@ function love.update(dt)
     end
 end
 
+
 function love.draw()
     stage:draw()
     if current_room then
@@ -47,11 +48,13 @@ function love.draw()
     end
 end
 
+
 function addRoom(room_type, room_name, ...)
     local room = _G[room_type](room_name, ...)
     rooms[room_name] = room
     return room
 end
+
 
 function gotoRoom(room_type, room_name, ...)
     if current_room and rooms[room_name] then

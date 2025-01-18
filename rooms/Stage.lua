@@ -2,12 +2,14 @@ Stage = Object:extend()
 
 function Stage:new()
     self.area = Area(self)
+    self.area:addPhysicsWorld()
     self.main_canvas = love.graphics.newCanvas(gw, gh)
+    self.area:addGameObject('Player', gw / 2, gh / 2)
 end
 
 function Stage:update(dt)
     camera.smoother = Camera.smooth.damped(5)
-    camera:lockPosition(dt, gw / 2, gh / 2)
+    camera:lockPosition(dt, gw/2, gh/2)
 
     self.area:update(dt)
 end
@@ -16,7 +18,6 @@ function Stage:draw()
     love.graphics.setCanvas(self.main_canvas)
     love.graphics.clear()
   	camera:attach(0, 0, gw, gh)
-    love.graphics.circle('line', gw / 2, gh / 2, 50)
     self.area:draw()
   	camera:detach()
     love.graphics.setCanvas()
