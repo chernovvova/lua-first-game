@@ -17,6 +17,10 @@ function Player:new(area, x, y, opts)
     self.v = 0  -- plater velocity
     self.max_v = 100  -- max velocity
     self.a = 100  -- acceleration
+
+
+    self.attack_speed = 1
+    self.timer:every(0.24 / self.attack_speed, function() self:shoot() end)
 end
 
 function Player:update(dt)
@@ -49,5 +53,23 @@ function Player:draw()
         self.y,
         self.x + 2*self.w*math.cos(self.r),
         self.y + 2*self.w*math.sin(self.r)
+    )
+end
+
+
+function Player:shoot()
+    local d = 1.2 * self.w
+
+    self.area:addGameObject(
+        'ShootEffect',
+        self.x + d * math.cos(self.r),
+        self.y + 1.2 * self.w * math.sin(self.r),
+        {player = self, d = d}
+    )
+    self.area:addGameObject(
+        'Projectile',
+        self.x + 1.5 * d * math.cos(self.r),
+        self.y + 1.5 * d * math.sin(self.r),
+        {r = self.r}
     )
 end
