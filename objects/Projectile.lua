@@ -55,7 +55,7 @@ function Projectile:die()
         self.x,
         self.y,
         {
-            color=self.color or HP_COLOR,
+            color=self.color or PROJECTILE_DEATH_COLOR,
             w=3*self.s
         }
     )
