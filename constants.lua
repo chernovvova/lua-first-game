@@ -5,3 +5,8 @@ BOOST_COLOR = {76, 195, 217}
 HP_COLOR = {241, 103, 69}
 PROJECTILE_DEATH_COLOR = {255, 50, 0}
 SKILL_POINT_COLOR = {255, 198, 93}
+EXPLODE_PARTICLE_COLORS = {
+    {134, 102, 102}, -- grey-red
+    {255, 51, 51}, -- red
+    {255, 145, 0} -- orange
+}
