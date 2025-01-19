@@ -39,6 +39,10 @@ function Player:update(dt)
         self.v * math.cos(self.r),
         self.v * math.sin(self.r)
     )
+
+    if self.x < 0 or self.y < 0 or self.x > gw or self.y > gh then
+        self:die()
+    end
 end
 
 function Player:draw()
