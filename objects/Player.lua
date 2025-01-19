@@ -23,6 +23,8 @@ function Player:new(area, x, y, opts)
     self.timer:every(0.24 / self.attack_speed, function() self:shoot() end)
 
     input:bind('f4', function() self:die() end)
+
+    self.timer:every(5, function() self:tick() end)
 end
 
 function Player:update(dt)
@@ -94,4 +96,9 @@ function Player:die()
             {color = EXPLODE_PARTICLE_COLORS[love.math.random(1, 3)]}
         )
     end
+end
+
+
+function Player:tick()
+    self.area:addGameObject('TickEffect', self.x, self.y, {parent = self})
 end
