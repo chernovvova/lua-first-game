@@ -21,6 +21,8 @@ function Player:new(area, x, y, opts)
 
     self.attack_speed = 1
     self.timer:every(0.24 / self.attack_speed, function() self:shoot() end)
+
+    input:bind('f4', function() self:die() end)
 end
 
 function Player:update(dt)
@@ -76,4 +78,19 @@ function Player:shoot()
         self.y + 1.5 * d * math.sin(self.r),
         {r = self.r}
     )
+end
+
+function Player:die()
+    self.dead = true
+    flash(4)
+    camera:shake(6, 60, 0.4)
+    slow(0.15, 1)
+    for i = 1, love.math.random(20, 30) do
+        self.area:addGameObject(
+            'ExplodeParticle',
+            self.x,
+            self.y,
+            {color = EXPLODE_PARTICLE_COLORS[love.math.random(1, 3)]}
+        )
+    end
 end
