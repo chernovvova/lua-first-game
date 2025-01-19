@@ -13,8 +13,8 @@ function Projectile:new(area, x, y, opts)
     self.fixture = fixture
 
     self.fixture:getBody():setLinearVelocity(
-        self.v*math.cos(self.r),
-        self.v*math.sin(self.r)
+        self.v * math.cos(self.r),
+        self.v * math.sin(self.r)
     )
 end
 
@@ -22,14 +22,17 @@ end
 function Projectile:update(dt)
     Projectile.super.update(self, dt)
     self.fixture:getBody():setLinearVelocity(
-        self.v*math.cos(self.r),
-        self.v*math.sin(self.r)
+        self.v * math.cos(self.r),
+        self.v * math.sin(self.r)
     )
+
+    if self.x < 0 or self.y < 0 or self.x > gw or self.y > gh then
+        self:die()
+    end
 end
 
 
 function Projectile:draw()
-    love.graphics.setColor(default_color)
     love.graphics.setColor(love.math.colorFromBytes(DEFAULT_COLOR))
     love.graphics.circle(
         'line',
@@ -41,4 +44,19 @@ end
 
 
 function Projectile:destroy()
+    Projectile.super.destroy(self)
+end
+
+
+function Projectile:die()
+    self.dead = true
+    self.area:addGameObject(
+        'ProjectileDeathEffect',
+        self.x,
+        self.y,
+        {
+            color=self.color or HP_COLOR,
+            w=3*self.s
+        }
+    )
 end
