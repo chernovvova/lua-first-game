@@ -76,9 +76,15 @@ function addRoom(room_type, room_name, ...)
     local room = _G[room_type](room_name, ...)
     rooms[room_name] = room
     return room
+function flash(frames)
+    flash_frames = frames
 end
 
 
+function slow(amount, duration)
+    slow_amount = amount
+    timer:tween('slow', duration, _G, {slow_amount = 1}, 'in-out-cubic')
+end
 function gotoRoom(room_type, ...)
     if current_room and current_room.destroy then
         current_room:destroy()
