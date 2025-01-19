@@ -22,7 +22,7 @@ function Stage:draw()
   	camera:detach()
     love.graphics.setCanvas()
 
-    love.graphics.setColor(255, 255, 255, 255)
+    love.graphics.setColor(love.math.colorFromBytes(255, 255, 255, 255))
     love.graphics.setBlendMode('alpha', 'premultiplied')
     love.graphics.draw(self.main_canvas, 0, 0, 0, sx, sy)
     love.graphics.setBlendMode('alpha')

@@ -30,6 +30,7 @@ end
 
 function Projectile:draw()
     love.graphics.setColor(default_color)
+    love.graphics.setColor(love.math.colorFromBytes(DEFAULT_COLOR))
     love.graphics.circle(
         'line',
         self.fixture:getBody():getX(),
