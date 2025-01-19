@@ -70,12 +70,6 @@ function love.draw()
     if current_room then current_room:draw() end
 
     if flash_frames then
-        flash_frames = flash_frames - 1
-        if flash_frames == -1 then
-            flash_frames = nil
-        end
-    end
-    if flash_frames then
         love.graphics.setColor(love.math.colorFromBytes(FLASH_COLOR))
         love.graphics.rectangle('fill', 0, 0, sx * gw, sy * gh)
         love.graphics.setColor(255, 255, 255)
@@ -83,8 +77,9 @@ function love.draw()
 end
 
 
-function flash(frames)
-    flash_frames = frames
+function flash(duration)
+    flash_frames = true
+    timer:after('flash', duration, function() flash_frames= false end)
 end
 
 
