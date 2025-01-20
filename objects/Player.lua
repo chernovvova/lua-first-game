@@ -15,7 +15,8 @@ function Player:new(area, x, y, opts)
     self.r = -math.pi / 2  -- player moving angle
     self.rv = 1.66 * math.pi  -- angle change velocity
     self.v = 0  -- plater velocity
-    self.max_v = 100  -- max velocity
+    self.base_max_v = 100
+    self.max_v = self.base_max_v  -- max velocity
     self.a = 100  -- acceleration
 
 
@@ -25,6 +26,23 @@ function Player:new(area, x, y, opts)
     input:bind('f4', function() self:die() end)
 
     self.timer:every(5, function() self:tick() end)
+
+    self.trail_color = SHIP_TRAIL_PARTICLE_COLOR
+    self.timer:every(
+        0.01,
+        function()
+            self.area:addGameObject(
+                'TrailParticle',
+                self.x - self.w * math.cos(self.r),
+                self.y - self.h * math.sin(self.r),
+                {
+                    parent = self,
+                    r = random(2, 4),
+                    d = random(0.15, 0.25),
+                    color = self.trail_color
+                }
+            )
+        end)
 end
 
 function Player:update(dt)
@@ -36,6 +54,15 @@ function Player:update(dt)
 
     if input:down('right') then
         self.r = self.r + self.rv * dt
+    end
+
+    self.max_v = self.base_max_v
+
+    if input:down('up') then
+        self.max_v = 1.5 * self.base_max_v
+    end
+    if input:down('down') then
+        self.max_v = 0.5 * self.base_max_v
     end
 
     self.v = math.min(self.v + self.a * dt, self.max_v)

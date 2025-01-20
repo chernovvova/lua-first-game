@@ -11,3 +11,4 @@ EXPLODE_PARTICLE_COLORS = {
     {255, 51, 51}, -- red
     {255, 145, 0} -- orange
 }
+SHIP_TRAIL_PARTICLE_COLOR = {255, 128, 0}
