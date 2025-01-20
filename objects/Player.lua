@@ -57,12 +57,20 @@ function Player:update(dt)
     end
 
     self.max_v = self.base_max_v
+    self.boosting = false
 
     if input:down('up') then
+        self.boosting = true
         self.max_v = 1.5 * self.base_max_v
     end
     if input:down('down') then
+        self.boosting = true
         self.max_v = 0.5 * self.base_max_v
+    end
+
+    self.trail_color = SHIP_TRAIL_PARTICLE_COLOR
+    if self.boosting then
+        self.trail_color = BOOST_COLOR
     end
 
     self.v = math.min(self.v + self.a * dt, self.max_v)
