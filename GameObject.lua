@@ -16,6 +16,7 @@ function GameObject:new(area, x, y, opts)
     self.dead = false
     self.timer = Timer()
     self.depth = 50
+    self.creation_time = love.timer.getTime()
 end
 
 
