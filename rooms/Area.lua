@@ -24,6 +24,7 @@ end
 
 
 function Area:draw()
+    table.sort(self.game_objects, function(a, b) return a.depth < b.depth end)
     for _, game_object in ipairs(self.game_objects) do game_object:draw() end
 end
 
