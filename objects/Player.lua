@@ -3,6 +3,9 @@ Player = GameObject:extend()
 function Player:new(area, x, y, opts)
     Player.super.new(self, area, x, y, opts)
 
+    self.ship = 'Striker'
+    self.polygons = {}
+
     self.x, self.y = x, y
     self.w, self.h = 12, 12
 
@@ -53,11 +56,35 @@ function Player:new(area, x, y, opts)
                     color = self.trail_color
                 }
             )
+        elseif self.ship == 'Striker' then
+            self.area:addGameObject(
+                'TrailParticle',
+                self.x - 1.0 * self.w * math.cos(self.r)
+                    + 0.2 * self.w * math.cos(self.r - math.pi / 2),
+                self.y - 1.0 * self.w * math.sin(self.r)
+                    + 0.2 * self.w * math.sin(self.r - math.pi / 2),
+                {
+                    parent = self,
+                    r = random(2, 4),
+                    d = random(0.15, 0.25),
+                    color = self.trail_color
+                }
+            )
+            self.area:addGameObject(
+                'TrailParticle',
+                self.x - 1.0 * self.w * math.cos(self.r)
+                    + 0.2 * self.w * math.cos(self.r + math.pi / 2),
+                self.y - 1.0 * self.w * math.sin(self.r)
+                    + 0.2 * self.w * math.sin(self.r + math.pi / 2),
+                {
+                    parent = self,
+                    r = random(2, 4),
+                    d = random(0.15, 0.25),
+                    color = self.trail_color
+                }
+            )
         end
     end)
-
-    self.ship = 'Fighter'
-    self.polygons = {}
 
     if self.ship == 'Fighter' then
         self.polygons[1] = {
@@ -82,7 +109,38 @@ function Player:new(area, x, y, opts)
             -self.w - self.w/2, self.w, -- 15
             0, self.w, -- 16
         }
-    end
+    elseif self.ship == 'Striker' then
+       self.polygons[1] = {
+           self.w, 0,
+           self.w/2, -self.w/2,
+           -self.w/2, -self.w/2,
+           -self.w, 0,
+           -self.w/2, self.w/2,
+           self.w/2, self.w/2,
+       }
+
+       self.polygons[2] = {
+           0, self.w/2,
+           -self.w/4, self.w,
+           0, self.w + self.w/2,
+           self.w, self.w,
+           0, 2*self.w,
+           -self.w/2, self.w + self.w/2,
+           -self.w, 0,
+           -self.w/2, self.w/2,
+       }
+
+       self.polygons[3] = {
+           0, -self.w/2,
+           -self.w/4, -self.w,
+           0, -self.w - self.w/2,
+           self.w, -self.w,
+           0, -2*self.w,
+           -self.w/2, -self.w - self.w/2,
+           -self.w, 0,
+           -self.w/2, -self.w/2,
+       }
+   end
 end
 
 function Player:update(dt)
