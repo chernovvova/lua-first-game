@@ -8,9 +8,7 @@ function Player:new(area, x, y, opts)
 
     local shape = love.physics.newCircleShape(self.w)
     local body = love.physics.newBody(area.world, self.x, self.y, 'dynamic')
-    local fixture = love.physics.newFixture(body, shape, 1)
-
-    self.fixture = fixture
+    self.fixture = love.physics.newFixture(body, shape, 1)
 
     self.r = -math.pi / 2  -- player moving angle
     self.rv = 1.66 * math.pi  -- angle change velocity
@@ -18,7 +16,6 @@ function Player:new(area, x, y, opts)
     self.base_max_v = 100
     self.max_v = self.base_max_v  -- max velocity
     self.a = 100  -- acceleration
-
 
     self.attack_speed = 1
     self.timer:every(0.24 / self.attack_speed, function() self:shoot() end)
@@ -28,13 +25,14 @@ function Player:new(area, x, y, opts)
     self.timer:every(5, function() self:tick() end)
 
     self.trail_color = SHIP_TRAIL_PARTICLE_COLOR
-    self.timer:every(
-        0.01,
-        function()
+    self.timer:every(0.01, function()
+        if self.ship == 'Fighter' then
             self.area:addGameObject(
                 'TrailParticle',
-                self.x - self.w * math.cos(self.r),
-                self.y - self.h * math.sin(self.r),
+                self.x - 0.9*self.w*math.cos(self.r)
+                    + 0.2*self.w*math.cos(self.r - math.pi/2),
+                self.y - 0.9*self.w*math.sin(self.r)
+                    + 0.2*self.w*math.sin(self.r - math.pi/2),
                 {
                     parent = self,
                     r = random(2, 4),
@@ -42,7 +40,49 @@ function Player:new(area, x, y, opts)
                     color = self.trail_color
                 }
             )
-        end)
+            self.area:addGameObject(
+                'TrailParticle',
+                self.x - 0.9 * self.w * math.cos(self.r)
+                    + 0.2 * self.w * math.cos(self.r + math.pi / 2),
+                self.y - 0.9 * self.w * math.sin(self.r)
+                    + 0.2 * self.w * math.sin(self.r + math.pi / 2),
+                {
+                    parent = self,
+                    r = random(2, 4),
+                    d = random(0.15, 0.25),
+                    color = self.trail_color
+                }
+            )
+        end
+    end)
+
+    self.ship = 'Fighter'
+    self.polygons = {}
+
+    if self.ship == 'Fighter' then
+        self.polygons[1] = {
+            self.w, 0, -- 1
+            self.w/2, -self.w/2, -- 2
+            -self.w/2, -self.w/2, -- 3
+            -self.w, 0, -- 4
+            -self.w/2, self.w/2, -- 5
+            self.w/2, self.w/2, -- 6
+        }
+        self.polygons[2] = {
+            self.w/2, -self.w/2, -- 7
+            0, -self.w, -- 8
+            -self.w - self.w/2, -self.w, -- 9
+            -3*self.w/4, -self.w/4, -- 10
+            -self.w/2, -self.w/2, -- 11
+        }
+        self.polygons[3] = {
+            self.w/2, self.w/2, -- 12
+            -self.w/2, self.w/2, -- 13
+            -3*self.w/4, self.w/4, -- 14
+            -self.w - self.w/2, self.w, -- 15
+            0, self.w, -- 16
+        }
+    end
 end
 
 function Player:update(dt)
@@ -85,18 +125,20 @@ function Player:update(dt)
 end
 
 function Player:draw()
-    love.graphics.circle(
-        'line',
-        self.fixture:getBody():getX(),
-        self.fixture:getBody():getY(),
-        self.fixture:getShape():getRadius()
-    )
-    love.graphics.line(
-        self.x,
-        self.y,
-        self.x + 2*self.w*math.cos(self.r),
-        self.y + 2*self.w*math.sin(self.r)
-    )
+    pushRotate(self.x, self.y, self.r)
+    love.graphics.setColor(love.math.colorFromBytes(DEFAULT_COLOR))
+    for _, polygon in ipairs(self.polygons) do
+        local points = {}
+        for ind, cord in ipairs(polygon) do
+            if ind % 2 == 1 then
+                table.insert(points, self.x + cord + random(-1, 1))
+            else
+                table.insert(points, self.y + cord + random(-1, 1))
+            end
+        end
+        love.graphics.polygon('line', points)
+    end
+    love.graphics.pop()
 end
 
 
