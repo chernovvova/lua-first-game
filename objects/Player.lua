@@ -141,6 +141,13 @@ function Player:new(area, x, y, opts)
            -self.w/2, -self.w/2,
        }
    end
+
+   self.max_boost = 100
+   self.boost = self.max_boost
+
+   self.can_boost = true
+   self.boost_timer = 0
+   self.boost_cooldown = 2
 end
 
 function Player:update(dt)
@@ -154,16 +161,37 @@ function Player:update(dt)
         self.r = self.r + self.rv * dt
     end
 
+    self.boost = math.min(self.boost + 10 * dt, self.max_boost)
+    self.boost_timer = self.boost_timer + dt
+
+    if self.boost_timer > self.boost_cooldown then
+        self.can_boost = true
+    end
+
     self.max_v = self.base_max_v
     self.boosting = false
 
-    if input:down('up') then
+    if input:down('up') and self.boost > 1 and self.can_boost then
         self.boosting = true
         self.max_v = 1.5 * self.base_max_v
+        self.boost = self.boost - 50 * dt
+
+        if self.boost <= 1 then
+            self.boosting = false
+            self.can_boost = false
+            self.boost_timer = 0
+        end
     end
     if input:down('down') then
         self.boosting = true
         self.max_v = 0.5 * self.base_max_v
+        self.boost = self.boost - 50 * dt
+
+        if self.boost <= 1 then
+            self.boosting = false
+            self.can_boost = false
+            self.boost_timer = 0
+        end
     end
 
     self.trail_color = SHIP_TRAIL_PARTICLE_COLOR
