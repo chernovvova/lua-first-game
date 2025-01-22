@@ -148,6 +148,12 @@ function Player:new(area, x, y, opts)
    self.can_boost = true
    self.boost_timer = 0
    self.boost_cooldown = 2
+
+   self.max_hp = 100
+   self.hp = self.max_hp
+
+   self.max_ammo = 100
+   self.ammo = self.max_ammo
 end
 
 function Player:update(dt)
