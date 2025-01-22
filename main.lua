@@ -2,6 +2,7 @@ Object = require 'libraries/classic/classic'
 Timer = require 'libraries/TimerUpgrade/EnhancedTimer'
 Input = require 'libraries/boipushy/Input'
 Camera = require 'libraries/hump/camera'
+Draft = require 'libraries/draft/draft'
 
 require 'GameObject'
 require 'utils'
@@ -25,6 +26,8 @@ function love.load()
     timer = Timer()
     input = Input()
     camera = Camera()
+    draft = Draft()
+
     input:bind('f1', function()
         print("Before collection: " .. collectgarbage("count")/1024)
         collectgarbage()
@@ -43,6 +46,7 @@ function love.load()
             current_room = nil
         end
     end)
+
     input:bind('left', 'left')
     input:bind('right', 'right')
     input:bind('up', 'up')
