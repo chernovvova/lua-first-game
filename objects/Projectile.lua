@@ -33,7 +33,7 @@ end
 
 
 function Projectile:draw()
-    love.graphics.setColor(love.math.colorFromBytes(DEFAULT_COLOR))
+    love.graphics.setColor(love.math.colorFromBytes(colors.DEFAULT_COLOR))
     love.graphics.circle(
         'line',
         self.fixture:getBody():getX(),
@@ -55,7 +55,7 @@ function Projectile:die()
         self.x,
         self.y,
         {
-            color=self.color or PROJECTILE_DEATH_COLOR,
+            color=self.color or colors.PROJECTILE_DEATH_COLOR,
             w=3*self.s
         }
     )

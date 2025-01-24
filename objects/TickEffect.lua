@@ -29,7 +29,7 @@ function TickEffect:update(dt)
 end
 
 function TickEffect:draw()
-    love.graphics.setColor(love.math.colorFromBytes(DEFAULT_COLOR))
+    love.graphics.setColor(love.math.colorFromBytes(colors.DEFAULT_COLOR))
     love.graphics.rectangle(
         'fill',
         self.x - self.w / 2,

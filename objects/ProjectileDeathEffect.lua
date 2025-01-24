@@ -23,7 +23,7 @@ end
 
 function ProjectileDeathEffect:draw()
     if self.first then
-        love.graphics.setColor(love.math.colorFromBytes(DEFAULT_COLOR))
+        love.graphics.setColor(love.math.colorFromBytes(colors.DEFAULT_COLOR))
     elseif self.second then
         love.graphics.setColor(love.math.colorFromBytes(self.color))
     end

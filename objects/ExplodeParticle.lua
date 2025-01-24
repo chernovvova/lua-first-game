@@ -4,7 +4,7 @@ ExplodeParticle = GameObject:extend()
 function ExplodeParticle:new(area, x, y, opts)
     ExplodeParticle.super.new(self, area, x, y, opts)
 
-    self.color = self.color or DEFAULT_COLOR
+    self.color = self.color or colors.DEFAULT_COLOR
     self.r = random(0, 2 * math.pi)
     self.s = self.s or random(2, 3)
     self.v = self.v or random(75, 150)

@@ -14,7 +14,7 @@ function love.load()
 
     love.graphics.setDefaultFilter('nearest', 'nearest')
     love.graphics.setLineStyle('rough')
-    love.graphics.setBackgroundColor(love.math.colorFromBytes(BACKGROUND_COLOR))
+    love.graphics.setBackgroundColor(love.math.colorFromBytes(colors.BACKGROUND_COLOR))
 
     local object_files = {}
     recursiveEnumerate('objects', object_files)
@@ -74,7 +74,7 @@ function love.draw()
     if current_room then current_room:draw() end
 
     if flash_frames then
-        love.graphics.setColor(love.math.colorFromBytes(FLASH_COLOR))
+        love.graphics.setColor(love.math.colorFromBytes(colors.FLASH_COLOR))
         love.graphics.rectangle('fill', 0, 0, sx * gw, sy * gh)
         love.graphics.setColor(255, 255, 255)
     end

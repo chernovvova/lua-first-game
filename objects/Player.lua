@@ -27,7 +27,7 @@ function Player:new(area, x, y, opts)
 
     self.timer:every(5, function() self:tick() end)
 
-    self.trail_color = SHIP_TRAIL_PARTICLE_COLOR
+    self.trail_color = colors.SHIP_TRAIL_PARTICLE_COLOR
     self.timer:every(0.01, function()
         if self.ship == 'Fighter' then
             self.area:addGameObject(
@@ -200,9 +200,9 @@ function Player:update(dt)
         end
     end
 
-    self.trail_color = SHIP_TRAIL_PARTICLE_COLOR
+    self.trail_color = colors.SHIP_TRAIL_PARTICLE_COLOR
     if self.boosting then
-        self.trail_color = BOOST_COLOR
+        self.trail_color = colors.BOOST_COLOR
     end
 
     self.v = math.min(self.v + self.a * dt, self.max_v)
@@ -218,7 +218,7 @@ end
 
 function Player:draw()
     pushRotate(self.x, self.y, self.r)
-    love.graphics.setColor(love.math.colorFromBytes(DEFAULT_COLOR))
+    love.graphics.setColor(love.math.colorFromBytes(colors.DEFAULT_COLOR))
     for _, polygon in ipairs(self.polygons) do
         local points = {}
         for ind, cord in ipairs(polygon) do
@@ -262,7 +262,7 @@ function Player:die()
             'ExplodeParticle',
             self.x,
             self.y,
-            {color = EXPLODE_PARTICLE_COLORS[love.math.random(1, 3)]}
+            {color = colors.EXPLODE_PARTICLE_COLORS[love.math.random(1, 3)]}
         )
     end
 end
